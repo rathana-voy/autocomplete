@@ -1,0 +1,35 @@
+.app-body{
+	margin-right: 15%;
+	margin-left: 15%;	
+
+	height: 950px;
+}
+
+.custom-search{
+	margin : 0;
+	padding: 0;
+	width: auto;
+	width: 50%;
+}
+.custom-search .search{
+	width: 50%;
+	height: 70xp;
+	font-family:khmer OS Battambang;
+	font-size: 18px;
+	padding: 5px;
+	margin:0;
+	display: absolute;
+
+	box-shadow:20px 20px 50px 5px #E0E0E0; 
+}
+
+.custom-search .btn-search{
+	margin :0;
+	height: 75xp;
+	font-family:khmer OS Battambang;
+	font-size: 18px;
+	display: absolute;
+	background: #ffffff;
+	border: 0;
+
+}
