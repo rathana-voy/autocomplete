@@ -1,8 +1,6 @@
 $(document).ready(function(){
 
-
-
-	$('#search-id').autoComplete({
+	/*$('#search-id').autoComplete({
 		minChars: 1,
 		source: function(term, response){
 			term = term.toLowerCase();
@@ -11,8 +9,6 @@ $(document).ready(function(){
 			$.ajax({
 	            dataType: "json",
 	            type : 'POST',
-	            url: 'http://localhost:8080/api/dictionary/'+term+'/15',
-	            /*header:{"Authorization":"Basic S0FfS1BTOktBX0tQUw=="},*/
 	            beforeSend: function(xhr){
 	            	xhr.setRequestHeader('Authorization', 'Basic S0FfS1BTOktBX0tQUw==');
 	            },
@@ -36,37 +32,56 @@ $(document).ready(function(){
 	                $('#search-id').removeClass('ui-autocomplete-loading');  
 	            }
 	        });
-
-			/*var suggestions = [];
-			for (i=0;i<choices.length;i++)
-			    if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
-			     	suggest(suggestions);*/
 		}
+	});*/
+
+	$(document).ready(function(){
+	
+		$('#search-id').autoComplete({
+			minChars: 1,
+			source: function(term, response){
+				term = term.toLowerCase();
+				$.ajax({
+		            dataType: "json",
+		            type : 'POST',
+		            url: 'http://www.knongdai.com/api/dictionary/'+term+'/15',
+		            beforeSend: function(xhr){
+		            	xhr.setRequestHeader('Authorization', 'Basic S0FfS1BTOktBX0tQUw==');
+		            },
+		            success: function(data) {
+		                $('#search-id').removeClass('ui-autocomplete-loading');  
+		                // hide loading image
+		                //console.log(data)
+
+						var suggestions = [];
+						if(data.DATA!=null){
+							for (i=0;i<data.DATA.length;i++){
+							    if (~data.DATA[i].KEYWORD +' '+ data.DATA[i].MIAN_OR_SUBCATEGORY_NAME.toLowerCase().indexOf(term)) suggestions.push(data.DATA[i]);
+							     	response(suggestions);
+							}
+						}else{
+							suggestions=[];
+							response(suggestions);
+						}
+		            },
+		            error: function(data) {
+		            	console.log(data);
+		                $('#search-id').removeClass('ui-autocomplete-loading');  
+		            }
+		        });
+
+			},
+			renderItem: function (item, search){
+				console.log(item);
+	            search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+	            var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+	            return '<div class="autocomplete-suggestion" data-langname="'+item.KEYWORD+'" data-lang="'+item.MIAN_OR_SUBCATEGORY_NAME+'" data-val="'+search+'"> <span>'+ item.KEYWORD.replace(re, "<b>$1</b>")+' ('+item.MIAN_OR_SUBCATEGORY_NAME +')'+'</span></div>';
+	        },
+	        onSelect: function(e, term, item){
+	        	$('#search-id').val(item.data('langname'));
+	        }
+		});
 	});
 
-	/*$( "#search-id" ).autocomplete({
-		minChars: 1,
-	    source: function( request, response ) {
-	    	request = request.toLowerCase();
-	    	alert(request);
-	        $.ajax({
-	            dataType: "json",
-	            type : 'Get',
-	            url: 'http://localhost:8080/api/dictionary/'+request+'/15',
-	            header:{"Authorization":"Basic S0FfS1BTOktBX0tQUw=="},
-	            success: function(data) {
-	                $('input.suggest-user').removeClass('ui-autocomplete-loading');  
-	                // hide loading image
-
-	                response( $.map( data, function(item) {
-	                    // your operation on data
-	                }));
-	            },
-	            error: function(data) {
-	                $('input.suggest-user').removeClass('ui-autocomplete-loading');  
-	            }
-	        });
-	    }
-	});*/
 
 });
